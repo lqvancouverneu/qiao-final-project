@@ -63,26 +63,91 @@ while True:
     choice = input("Choose flight finding method (1.Cheapest, 2.Fewest Stops, 3.All Flights, 4.Reenter cities): ").strip()
     match choice:
         case '1':
-            route_dijkstra, cost_dijkstra = dijkstra_pathfind(graph, start=start, goal=goal)
-            route_dijkstra_joined = " -> ".join(route_dijkstra)
-            print("Lowest cost(using Dijkstra):")
-            print(route_dijkstra_joined, "Cost:", cost_dijkstra)
+            steps, route_dijkstra, cost_dijkstra = dijkstra_pathfind(graph, start=start, goal=goal)
+
+            # Ask user preference
+            step_by_step = input("View step-by-step? (y/n): ").strip().lower() == 'y'
+            
+            print(f"\n[Dijkstra] Start: {start} → {goal}\n")
+            for i, step in enumerate(steps, 1):
+                print(f"Step {i}/{len(steps)}:")
+                print(f"  Action: {step['action']}")
+                print(f"  Queue: {step['queue']}")
+                print(f"  Path so far: {' → '.join(step['current_path'])}", f"(Cost: {step['cost']})")
+                if 'neighbors' in step:
+                    print(f"  Neighbors: {step['neighbors']}")
+                    print(f"  Updated Queue: {step['updated_queue']}")
+                print()
+            
+                if step_by_step and i < len(steps):
+                    user_input = input("Press Enter for next step, or 'a' to show all remaining: ").strip().lower()
+                    if user_input == 'a':
+                        step_by_step = False
+
+            if route_dijkstra:
+                print(f"✓ Lowest cost path: {' → '.join(route_dijkstra)} (Cost: {cost_dijkstra})")
+            else:
+                print("✗ No path found")
 
         case '2':
-            route_bfs, cost_bfs = bfs_pathfind(graph, start=start, goal=goal)
-            route_bfs_joined = " -> ".join(route_bfs)
-            print("Fewest stops(using BFS):")
-            print(route_bfs_joined, "Cost:", cost_bfs)
+            steps, route_bfs, cost_bfs = bfs_pathfind(graph, start=start, goal=goal)
+
+            # Ask user preference
+            step_by_step = input("View step-by-step? (y/n): ").strip().lower() == 'y'
+
+            print(f"\n[BFS] Start: {start} → {goal}\n")
+            for i, step in enumerate(steps, 1):
+                print(f"Step {i}/{len(steps)}:")
+                print(f"  Action: {step['action']}")
+                print(f"  Queue: {step['queue']}")
+                print(f"  Visited: {step['visited']}")
+                print(f"  Path so far: {' → '.join(step['current_path'])}", f"(Cost: {step['cost']})")
+                if 'neighbors' in step:
+                    print(f"  Neighbors: {step['neighbors']}")
+                    print(f"  Updated Queue: {step['updated_queue']}")
+                print()
+            
+                # Pause only if step-by-step mode and not last step
+                if step_by_step and i < len(steps):
+                    user_input = input("Press Enter for next step, or 'a' to show all remaining steps: ").strip().lower()
+                    if user_input == 'a':
+                        step_by_step = False  # Show all remaining steps without pausing
+
+            if route_bfs:
+                print(f"✓ Path found: {' → '.join(route_bfs)} (Cost: {cost_bfs})")
+            else:
+                print("✗ No path found")
 
         case '3':
-            all_routes = dfs_pathfind(graph, start=start, goal=goal)
+            steps, all_routes = dfs_pathfind(graph, start=start, goal=goal)
             def get_sort_key(x):
                 return x[1]
             all_routes.sort(key=get_sort_key)
+
+            print(f"\n[DFS] Start: {start} → {goal}\n")
+            
+            # Ask user preference
+            step_by_step = input("View step-by-step? (y/n): ").strip().lower() == 'y'
+            
+            for i, step in enumerate(steps, 1):
+                print(f"Step {i}/{len(steps)}:")
+                print(f"  Action: {step['action']}")
+                print(f"  Stack: {step['stack']}")
+                print(f"  Path so far: {' → '.join(step['current_path'])}", f"(Cost: {step['cost']})")
+                if 'neighbors' in step:
+                    print(f"  Neighbors: {step['neighbors']}")
+                    print(f"  Updated Stack: {step['updated_stack']}")
+                print()
+            
+                # Pause only if step-by-step mode and not last step
+                if step_by_step and i < len(steps):
+                    user_input = input("Press Enter for next step, or 'a' to show all remaining steps: ").strip().lower()
+                    if user_input == 'a':
+                        step_by_step = False  # Show all remaining steps without pausing
+            
             print("All DFS Paths (sorted by cost):")
             for route_dfs, cost_dfs in all_routes:
-                route_dfs_joined = " -> ".join(route_dfs)
-                print(route_dfs_joined, "Cost:", cost_dfs)
+                print(f"  {' → '.join(route_dfs)} (Cost: {cost_dfs})")
 
         case '4':
             start, goal = get_user_input()
