@@ -67,7 +67,7 @@ def dijkstra_pathfind(graph: Graph, start: str, goal: str) -> Tuple[List[str], f
         # Record this step for instructional display
         step = {
             'action': f'Pop: {graph.nodes[current_node]["name"]} (Cost: {current_cost})',
-            'queue': [(c, graph.nodes[node]["name"]) for c, node, _ in queue],
+            'queue': [(current_cost, graph.nodes[node]["name"]) for current_cost, node, _ in queue],
             'current_path': [graph.nodes[node]["name"] for node in path],
             'cost': current_cost
         }
@@ -97,7 +97,7 @@ def dijkstra_pathfind(graph: Graph, start: str, goal: str) -> Tuple[List[str], f
                 heapq.heappush(queue, (new_cost, neighbor, path + [neighbor]))
 
         # Record the updated heap state after adding neighbors
-        updated_queue = [(c, graph.nodes[node]["name"]) for c, node, _ in queue]
+        updated_queue = [(current_cost, graph.nodes[node]["name"]) for current_cost, node, _ in queue]
         step['updated_queue'] = updated_queue
         steps.append(step)
 

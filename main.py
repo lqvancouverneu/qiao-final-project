@@ -69,16 +69,22 @@ while True:
             step_by_step = input("View step-by-step? (y/n): ").strip().lower() == 'y'
             
             print(f"\n[Dijkstra] Start: {start} → {goal}\n")
+            #Enumerate will return a list of tuples. 
+            #And each item in the tuples is the index and a single step.
+            #Loop through the list, for each iteration we will get the index and the step.
             for i, step in enumerate(steps, 1):
                 print(f"Step {i}/{len(steps)}:")
+                #find the value of action in the step dictionary
                 print(f"  Action: {step['action']}")
                 print(f"  Queue: {step['queue']}")
                 print(f"  Path so far: {' → '.join(step['current_path'])}", f"(Cost: {step['cost']})")
+                # Check if 'neighbors' key exists in the step dictionary to find it is the last step or not
                 if 'neighbors' in step:
                     print(f"  Neighbors: {step['neighbors']}")
                     print(f"  Updated Queue: {step['updated_queue']}")
                 print()
             
+                # Pause only if step-by-step mode and not last step
                 if step_by_step and i < len(steps):
                     user_input = input("Press Enter for next step, or 'a' to show all remaining: ").strip().lower()
                     if user_input == 'a':
@@ -96,11 +102,11 @@ while True:
             step_by_step = input("View step-by-step? (y/n): ").strip().lower() == 'y'
 
             print(f"\n[BFS] Start: {start} → {goal}\n")
-            for i, step in enumerate(steps, 1):
+            for i, step in enumerate(steps, 1): # [(index1, step1), (index2, step2) ...]
                 print(f"Step {i}/{len(steps)}:")
                 print(f"  Action: {step['action']}")
                 print(f"  Queue: {step['queue']}")
-                print(f"  Visited: {step['visited']}")
+                print(f"  Previous level: {step['previous_level']}")
                 print(f"  Path so far: {' → '.join(step['current_path'])}", f"(Cost: {step['cost']})")
                 if 'neighbors' in step:
                     print(f"  Neighbors: {step['neighbors']}")
@@ -120,15 +126,16 @@ while True:
 
         case '3':
             steps, all_routes = dfs_pathfind(graph, start=start, goal=goal)
+            # Sort all routes by cost for better readability
             def get_sort_key(x):
                 return x[1]
             all_routes.sort(key=get_sort_key)
-
+            # \n is new line
             print(f"\n[DFS] Start: {start} → {goal}\n")
             
             # Ask user preference
             step_by_step = input("View step-by-step? (y/n): ").strip().lower() == 'y'
-            
+    
             for i, step in enumerate(steps, 1):
                 print(f"Step {i}/{len(steps)}:")
                 print(f"  Action: {step['action']}")

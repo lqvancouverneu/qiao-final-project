@@ -3,7 +3,7 @@ from typing import List, Tuple
 from src.graph import Graph
 
 
-def bfs_pathfind(graph: Graph, start: str, goal: str) -> Tuple[List[str], float]:
+def bfs_pathfind(graph: Graph, start: str, goal: str) -> Tuple[List[dict], List[str], float]:
     """
     Performs Breadth-First Search to find the shortest path (fewest hops) from start to goal.
     
@@ -38,7 +38,7 @@ def bfs_pathfind(graph: Graph, start: str, goal: str) -> Tuple[List[str], float]
         # steps = [step1, step2, step3, ...]
     """
      # Initialize queue with starting node (FIFO - First In First Out)
-    queue = deque([(start, [start], 0)])
+    queue = deque([(start, [start], 0.0)])
     # Track all visited nodes to avoid revisiting them
     previous_level = {start}
     # Store each step for users to see
@@ -52,7 +52,7 @@ def bfs_pathfind(graph: Graph, start: str, goal: str) -> Tuple[List[str], float]
         step = {
             'action': f'Dequeue: {graph.nodes[current_node]["name"]}',
             'queue': [graph.nodes[node]["name"] for node, _, _ in queue],
-            'visited': [graph.nodes[node]["name"] for node in previous_level],
+            'previous_level': [graph.nodes[node]["name"] for node in previous_level],
             'current_path': [graph.nodes[node]["name"] for node in path],
             'cost': cost
         }
@@ -68,11 +68,12 @@ def bfs_pathfind(graph: Graph, start: str, goal: str) -> Tuple[List[str], float]
         
         # Get all neighbors (outgoing flights from current city)
         neighbors = graph.get_neighbors(current_node)
-        neighbor_names = [graph.nodes[n]["name"] for n, _ in neighbors]
+        neighbor_names = [graph.nodes[neighbor]["name"] for neighbor, _ in neighbors]
         step['neighbors'] = neighbor_names
   
 
         # Explore all unvisited neighbors by adding them to queue
+        # Iterate over neighbors and each iteration we will get neighbor and weight
         for neighbor, weight in neighbors:
             # if the city is visited in the current path, skip it to avoid cycles
             if neighbor not in previous_level:

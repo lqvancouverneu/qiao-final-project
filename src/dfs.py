@@ -2,7 +2,7 @@ from typing import List, Tuple
 from src.graph import Graph
 
 
-def dfs_pathfind(graph: Graph, start: str, goal: str) -> List[Tuple[List[str], float]]:
+def dfs_pathfind(graph: Graph, start: str, goal: str) -> Tuple[List[dict], List[Tuple[List[str], float]]]:
     """
     Performs Depth-First Search to find ALL possible routes from start to goal.
     

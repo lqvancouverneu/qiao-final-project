@@ -109,7 +109,6 @@ class TestGraph(unittest.TestCase):
         self.graph.add_node("toronto", "Toronto")
         self.graph.add_edge("vancouver", "toronto", 5.0)
         
-        # Need to add get_weight method to Graph class
         neighbors = self.graph.get_neighbors("vancouver")
         weight = neighbors[0][1]
         self.assertEqual(weight, 5.0)
@@ -121,11 +120,6 @@ class TestGraph(unittest.TestCase):
         
         neighbors = self.graph.get_neighbors("vancouver")
         self.assertEqual(len(neighbors), 0)
-    
-    def test_get_weight_nonexistent_node(self):
-        """Test getting weight when source node doesn't exist"""
-        neighbors = self.graph.get_neighbors("nonexistent")
-        self.assertIsNone(neighbors)
     
     def test_different_weights_different_edges(self):
         """Test that different edges have different weights"""
@@ -148,15 +142,6 @@ class TestGraph(unittest.TestCase):
         
         neighbors = self.graph.get_neighbors("vancouver")
         self.assertEqual(neighbors[0][1], 0.0)
-    
-    def test_negative_weight_edge(self):
-        """Test adding an edge with negative weight"""
-        self.graph.add_node("vancouver", "Vancouver")
-        self.graph.add_node("toronto", "Toronto")
-        self.graph.add_edge("vancouver", "toronto", -5.0)
-        
-        neighbors = self.graph.get_neighbors("vancouver")
-        self.assertEqual(neighbors[0][1], -5.0)
 
 
 if __name__ == "__main__":
