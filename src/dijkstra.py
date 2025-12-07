@@ -84,10 +84,13 @@ def dijkstra_pathfind(graph: Graph, start: str, goal: str) -> Tuple[List[str], f
         
         # Get all outgoing flights from current city
         neighbors = graph.get_neighbors(current_node)
-        neighbor_names = [graph.nodes[n]["name"] for n, _ in neighbors]
+        neighbor_names = []
+        for neighbor in neighbors:
+            neighbor_id, weight = neighbor
+            neighbor_names.append((graph.nodes[neighbor_id]["name"], weight))
         step['neighbors'] = neighbor_names
 
-        # Update neighbor costs if cheaper path found
+        # Update neighbor costs if cheaper path foun
         for neighbor, weight in graph.get_neighbors(current_node):
             # Calculate new cost to reach neighbor through current node
             new_cost = current_cost + weight
