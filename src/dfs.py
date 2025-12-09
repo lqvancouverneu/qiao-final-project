@@ -52,8 +52,8 @@ def dfs_pathfind(graph: Graph, start: str, goal: str) -> Tuple[List[dict], List[
             continue
         
         neighbors = graph.get_neighbors(current_node)
-        neighbor_names = [graph.nodes[n]["name"] for n, _ in neighbors]
-        step['neighbors'] = neighbor_names
+        neighbor = [(graph.nodes[n]["name"], w) for n, w in neighbors]
+        step['neighbors'] = neighbor
             # Add unvisited neighbors to stack
         for neighbor, weight in neighbors:
             # if the city is visited in the current path, skip it to avoid cycles

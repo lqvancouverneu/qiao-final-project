@@ -68,8 +68,8 @@ def bfs_pathfind(graph: Graph, start: str, goal: str) -> Tuple[List[dict], List[
         
         # Get all neighbors (outgoing flights from current city)
         neighbors = graph.get_neighbors(current_node)
-        neighbor_names = [graph.nodes[neighbor]["name"] for neighbor, _ in neighbors]
-        step['neighbors'] = neighbor_names
+        neighbor = [(graph.nodes[n]["name"], w) for n, w in neighbors]
+        step['neighbors'] = neighbor
   
 
         # Explore all unvisited neighbors by adding them to queue
